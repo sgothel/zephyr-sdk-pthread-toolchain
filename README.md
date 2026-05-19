@@ -31,7 +31,7 @@ Only a minimal Zephyr PR, see [pthread: Support handling Zephyr native threads #
 is required to make its `pthread` implementation functional for this purpose.
 
 ### Injected Zephyr `pthread.h` header
-The build the toolchain w/ the Zephyr `pthread` header, the [amalgamated pthread.h](include/inject/zephyr/pthread.h)
+To build the toolchain w/ the Zephyr `pthread` header, the [amalgamated pthread.h](include/inject/zephyr/pthread.h)
 is injected into the process. This header is an all-in-one merged, architecture agnostic version.
 
 ### Toolchain `GCC` and `libstc++` Configuration
