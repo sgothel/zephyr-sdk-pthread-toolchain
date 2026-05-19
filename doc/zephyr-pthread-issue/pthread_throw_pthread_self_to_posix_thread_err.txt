@@ -1,0 +1,27 @@
+to_posix_thread:
+- posix_thread_to_offset
+- to_posix_thread
+- 
+
+main thread is not a pthread!
+
+bit 0xc3c3c3ec masked OK
+bit 0x43c3c3ec unmasked
+
+posix_thread posix_thread_pool[CONFIG_POSIX_THREAD_THREADS_MAX]; w/ CONFIG_POSIX_THREAD_THREADS_MAX 40
+print &posix_thread_pool[0]
+$7 = (struct posix_thread *) 0x20000330 <posix_thread_pool>
+
+(gdb) bt
+#0  to_posix_thread (pthread=3284386796) at /usr/local/projects/OS/zephyrproject/zephyr/subsys/portability/posix/options/pthread.c:158
+#1  0x000066c2 in pthread_setspecific (key=2147483648, value=0x20033d48) at /usr/local/projects/OS/zephyrproject/zephyr/subsys/portability/posix/options/key.c:176
+#2  0x0001af4e in __gthread_setspecific (__key=<optimized out>, __ptr=0x20033d48) at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/sdk-crosstools-ng/.build/arm-zephyr-eabi/build/build-cc-gcc-final/arm-zephyr-eabi/thumb/v7-m/nofp/libstdc++-v3/include/arm-zephyr-eabi/bits/gthr-default.h:739
+#3  __cxxabiv1::__cxa_get_globals () at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/sdk-crosstools-ng/.build/arm-zephyr-eabi/src/gcc/libstdc++-v3/libsupc++/eh_globals.cc:149
+#4  0x0003ca96 in __cxxabiv1::__cxa_throw (obj=0x200342a0, tinfo=0x55ba4 <typeinfo for (anonymous namespace)::RuntimeException>, dest=0x15bf9 <(anonymous namespace)::RuntimeException::~RuntimeException()>) at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/sdk-crosstools-ng/.build/arm-zephyr-eabi/src/gcc/libstdc++-v3/libsupc++/eh_throw.cc:83
+#5  0x00017012 in operator() (__closure=0x20005c3c <z_main_stack+3364>) at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/extern/c_cxx_runtime_tests/src/testcases/cpp/test_exception_handling2.cpp:452
+#6  0x00038794 in util::lang::callNotOptimize<TestExceptions2MThreads(const ccxxrtt_TestDescriptor_t*, ccxxrtt_Monitor, bool, bool)::<lambda()> >(struct {...}) (f=...) at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/extern/c_cxx_runtime_tests/include/c_cxx_runtime_tests/langutils.hpp:35
+#7  0x00017276 in TestExceptions2MThreads (pTestDescr=0x20005e88 <z_main_stack+3952>, monitorFunc=0xfc91 <Monitor>, useRethrowException=true, useTypeID=false) at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/extern/c_cxx_runtime_tests/src/testcases/cpp/test_exception_handling2.cpp:442
+#8  0x00038762 in CCXXRTT_Test_cpp_Exceptions2MThreads4RethrowNoTypeID (pTestDescr=0x20005e88 <z_main_stack+3952>, monitorFunc=0xfc91 <Monitor>) at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/extern/c_cxx_runtime_tests/src/testcases/cpp/test_exception_handling2.cpp:610
+#9  0x0000fdb4 in ccxxrtt_RunTests (pTestDescr=0x20005e88 <z_main_stack+3952>) at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/extern/c_cxx_runtime_tests/src/runners/no_shell_runner.c:108
+#10 0x00036912 in ccxxrtt_RunTest (pTestFunc=0x3874d <CCXXRTT_Test_cpp_Exceptions2MThreads4RethrowNoTypeID(ccxxrtt_TestDescriptor_t const*, ccxxrtt_Monitor)>, name=0x4f390 "Test_cpp_Exceptions2MThreads4RethrowNoTypeID") at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/extern/c_cxx_runtime_tests/src/runners/no_shell_runner.c:127
+#11 0x00002088 in main () at /usr/local/projects/Wago/MC004711_LVMetering/zephyr_threading_cpptest01/src/main.cpp:97

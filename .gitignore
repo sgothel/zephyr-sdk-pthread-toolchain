@@ -1,0 +1,32 @@
+/Debug*/
+/Release*/
+build*/
+.build*/
+dist*/
+/.cache/
+
+# Object files
+*.o
+*.lib
+*.so
+*.so.*
+*.lo
+*.la
+*.pyc
+*.class
+
+# Temp files
+*.swp
+*.swo
+*~
+*.log
+documentation.tar.xz
+.clangd
+.config*
+temp/
+
+# Eclipse files
+#.cproject
+#.project
+
+# Archive files
