@@ -1,0 +1,5 @@
+# clang-format 19
+# https://clang-format-configurator.site/
+---
+Language: Cpp
+BasedOnStyle: LLVM

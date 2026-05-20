@@ -1,0 +1,12 @@
+# Zephyr 4.4.9, commit 3015f654097a93bde292a3e879a7a7397ad184d2, 2026-04-16
+#
+target remote localhost:1234
+#list 'test11_Read10Write10'
+#list 'sys_trace_thread_switched_in_user'
+#list 'test01'
+break /usr/local/projects/OS/zephyrproject/zephyr/lib/os/assert.c:38
+break /usr/local/projects/OS/zephyrproject/zephyr/lib/os/assert.c:43
+break /usr/local/projects/OS/zephyrproject/zephyr/kernel/fatal.c:91
+break /usr/local/projects/OS/zephyrproject-4.4.0/zephyr/kernel/fatal.c:119
+break /usr/local/projects/OS/zephyrproject-4.4.0/zephyr/lib/libc/common/source/stdlib/abort.c:13
+break /usr/local/projects/OS/zephyrproject/zephyr/lib/libc/common/source/stdlib/abort.c:13
