@@ -58,14 +58,14 @@ See [Zephyr POSIX and C++ Support](doc/Zephyr-PosixAndCppSupport.md) for more de
 `scripts/setenv.sh` sets up environment variables as expected in this description.
 If diverting, please change `scripts/setenv.sh` and throughout your build procedure.
 
-Variable                      Path
---------------------------    ------------------------------------------------------
-`PATH`                        `/usr/local/bin:${PATH}`
-`CT_PREFIX`                   `${HOME}/crosstool-ng`
-`CT_LOCAL_TARBALLS_DIR`       `${CT_PREFIX}/src`
-`ZEPHYR_SDK_INSTALL_DIR`      `${HOME}/zephyr-sdk-1.0.1-mixed`
-`ZEPHYR_SDK_WORKSPACE`        `/usr/local/projects/OS/zephyrproject-sdk-ng/sdk-ng`
-`ZEPHYR_BASE`                 `/usr/local/projects/OS/zephyrproject/zephyr`
+| Variable                   | Path                                                   |
+| -------------------------- | ------------------------------------------------------ |
+| `PATH`                     | `/usr/local/bin:${PATH}`                               |
+| `CT_PREFIX`                | `${HOME}/crosstool-ng`                                 |
+| `CT_LOCAL_TARBALLS_DIR`    | `${CT_PREFIX}/src`                                     |
+| `ZEPHYR_SDK_INSTALL_DIR`   | `${HOME}/zephyr-sdk-1.0.1-mixed`                       |
+| `ZEPHYR_SDK_WORKSPACE`     | `/usr/local/projects/OS/zephyrproject-sdk-ng/sdk-ng`   |
+| `ZEPHYR_BASE`              | `/usr/local/projects/OS/zephyrproject/zephyr`          |
 
 `scripts/setenv.sh` also creates `CT_LOCAL_TARBALLS_DIR`, if not existing.
 
