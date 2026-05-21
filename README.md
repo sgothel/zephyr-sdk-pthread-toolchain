@@ -103,8 +103,6 @@ cp -a ${HOME}/zephyr-sdk-1.0.1 ${HOME}/zephyr-sdk-1.0.1-mixed
 
 For other locations, please adjust `scripts/setenv.sh`.
 
-Further, the new SDK location must be made public to your related Zephyr builds.
-
 ### Install crosstools-ng 
 I have used [crosstools-ng](https://crosstool-ng.github.io/) version 1.28.0,
 build from its [git repo](https://github.com/crosstool-ng/crosstool-ng) as follows.
