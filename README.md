@@ -64,7 +64,8 @@ If diverting, please change `scripts/setenv.sh` and throughout your build proced
 | `CT_PREFIX`                | `${HOME}/crosstool-ng`                                 |
 | `CT_LOCAL_TARBALLS_DIR`    | `${CT_PREFIX}/src`                                     |
 | `ZEPHYR_SDK_INSTALL_DIR`   | `${HOME}/zephyr-sdk-1.0.1-mixed`                       |
-| `ZEPHYR_SDK_WORKSPACE`     | `/usr/local/projects/OS/zephyrproject-sdk-ng/sdk-ng`   |
+| `ZEPHYR_SDK_ROOT`          | `/usr/local/projects/OS/zephyrproject-sdk-ng`          |
+| `ZEPHYR_SDK_WORKSPACE`     | `${ZEPHYR_SDK_ROOT}/sdk-ng`                            |
 | `ZEPHYR_BASE`              | `/usr/local/projects/OS/zephyrproject/zephyr`          |
 
 `scripts/setenv.sh` also creates `CT_LOCAL_TARBALLS_DIR`, if not existing.
@@ -84,8 +85,10 @@ Setting up directories as described above
 Cloning the git repository as follows
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
-cd ${ZEPHYR_SDK_WORKSPACE}
+mkdir -p ${ZEPHYR_SDK_ROOT}
+cd ${ZEPHYR_SDK_ROOT}
 git clone https://github.com/zephyrproject-rtos/sdk-ng
+cd ${ZEPHYR_SDK_WORKSPACE}
 git submodule update --init
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

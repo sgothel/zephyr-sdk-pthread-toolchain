@@ -18,11 +18,14 @@ apt-get install --no-install-recommends git cmake ninja-build gperf \
 
 ## Clone git repository
 
-We assume `ZEPHYR_SDK_WORKSPACE` was set to `/usr/local/projects/OS/zephyrproject-sdk-ng/sdk-ng`.
+We assume `ZEPHYR_SDK_ROOT` was set to `/usr/local/projects/OS/zephyrproject-sdk-ng`
+and `ZEPHYR_SDK_WORKSPACE` was set to `/usr/local/projects/OS/zephyrproject-sdk-ng/sdk-ng`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
-cd ${ZEPHYR_SDK_WORKSPACE}
+mkdir -p ${ZEPHYR_SDK_ROOT}
+cd ${ZEPHYR_SDK_ROOT}
 git clone https://github.com/zephyrproject-rtos/sdk-ng
+cd ${ZEPHYR_SDK_WORKSPACE}
 git submodule update --init
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
