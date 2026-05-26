@@ -12,7 +12,8 @@
  */
 
 #include <pthread.h>
-#include <iostream>
+
+#include <zephyr/kernel.h>
 
 #include <util/miscutils.hpp>
 
@@ -50,7 +51,7 @@ static void* pthread_entry(void*)
     if (val != &tagP) {
         src_ABORT();
     }
-    if (val != &tagP) {
+    if (*val != tagP) {
         src_ABORT();
     }
     dbg_PRINT("Thread-P: END");
@@ -79,7 +80,7 @@ void kthread_entry() {
     if (val != &tagK) {
         src_ABORT();
     }
-    if (val != &tagK) {
+    if (*val != tagK) {
         src_ABORT();
     }
     dbg_PRINT("Thread-K: END");
@@ -106,7 +107,7 @@ int main()
     if (val != &tagM) {
         src_ABORT();
     }
-    if (val != &tagM) {
+    if (*val != tagM) {
         src_ABORT();
     }
     dbg_PRINT("MAIN: P1");

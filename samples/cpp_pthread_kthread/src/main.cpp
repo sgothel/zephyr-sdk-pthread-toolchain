@@ -12,7 +12,6 @@
  */
 
 #include <pthread.h>
-#include <iostream>
 
 #include <util/miscutils.hpp>
 
@@ -106,7 +105,6 @@ int main()
 {
     dbg_PRINT("START");
 
-    std::cout << "XXX P0: " << CONFIG_BOARD << std::endl;
     {
       k_tid_t kself = k_current_get();
       if (!kself) {
