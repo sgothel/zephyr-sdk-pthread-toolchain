@@ -2,6 +2,7 @@
 /Release*/
 build*/
 .build*/
+twister-out*/
 dist*/
 .cache/
 

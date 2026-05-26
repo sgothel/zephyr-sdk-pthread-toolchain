@@ -18,10 +18,7 @@
 #include <util/miscutils.hpp>
 
 #define STACKSIZE 2000
-struct k_thread kthread_thread;
-K_THREAD_STACK_DEFINE(kthread__stack, STACKSIZE);
-
-pthread_t pthread_thread;
+static K_THREAD_STACK_DEFINE(kthread__stack, STACKSIZE);
 
 static pthread_key_t key;
 static uint8_t const tagP = 0x11U;
@@ -58,7 +55,7 @@ static void* pthread_entry(void*)
     return NULL;
 }
 
-void kthread_entry() {
+static void kthread_entry() {
     dbg_PRINT("Thread-P: START");
 
     pthread_t pself = pthread_self();
@@ -88,6 +85,9 @@ void kthread_entry() {
 
 int main()
 {
+    pthread_t pthread_thread;
+    struct k_thread kthread_thread;
+
     dbg_PRINT("MAIN: START");
 
     if (0 != pthread_key_create(&key, nullptr)) {

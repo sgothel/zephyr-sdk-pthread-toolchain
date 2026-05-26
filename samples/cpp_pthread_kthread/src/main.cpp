@@ -24,14 +24,10 @@ extern "C" {
 }
 
 #define STACKSIZE 2000
-struct k_thread kthread_thread;
-struct k_thread *kthread_thread2;
-K_THREAD_STACK_DEFINE(kthread__stack, STACKSIZE);
+static K_THREAD_STACK_DEFINE(kthread__stack, STACKSIZE);
 
-pthread_t pthread_thread;
-pthread_t pthread_thread2;
-
-static pthread_key_t key;
+static pthread_t pthread_thread2;
+static struct k_thread *kthread_thread2;
 
 static void* pthread_entry(void*)
 {
@@ -53,7 +49,7 @@ static void* pthread_entry(void*)
   return NULL;
 }
 
-void kthread_entry() {
+static void kthread_entry() {
   k_tid_t kself = k_current_get();
   if (!kself) {
     src_ABORT();
@@ -71,10 +67,10 @@ void kthread_entry() {
   }
 }
 
-extern bool pthread_kthread_coop01_test();
-
-bool pthread_kthread_coop01_test()
+static bool pthread_kthread_coop01_test()
 {
+  pthread_t pthread_thread;
+  struct k_thread kthread_thread;
   if (pthread_create(&pthread_thread, NULL, &pthread_entry, NULL) != 0)
   {
     src_ABORT();
