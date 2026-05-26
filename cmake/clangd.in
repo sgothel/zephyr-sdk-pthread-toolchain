@@ -51,6 +51,7 @@ CompileFlags:
         -I, @ZEPHYR_BASE@/kernel,
         -I, @ZEPHYR_BASE@/kernel/sys,
         -I, @ZEPHYR_BASE@/kernel/userspace,
+        -I, @ZEPHYR_BASE@/subsys/testsuite/ztest/include,
         -I, @PROJECT_REPO_ROOT@/include
         ]
 
