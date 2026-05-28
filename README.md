@@ -111,11 +111,15 @@ build from its [git repo](https://github.com/crosstool-ng/crosstool-ng) as follo
 Install `crosstool-ng` under `/usr/local`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
-apt-get install help2man python3-dev
+# Debian or Ubuntu
+sudo apt-get install git build-essential autotools-dev automake autoconf g++ gcc libc-dev libpthread-stubs0-dev \
+                     cmake cmake-extras extra-cmake-modules ccache \
+                     texinfo gawk libtool-bin flex bison libncurses-dev \
+                     help2man python3-dev
 
 git clone https://github.com/crosstool-ng/crosstool-ng
 cd crosstool-ng
-git checkout --track -b b_1.28.0 crosstool-ng-1.28.0
+git checkout -b b_1.28.0 crosstool-ng-1.28.0
 ./bootstrap
 
 ./configure --prefix=/usr/local
