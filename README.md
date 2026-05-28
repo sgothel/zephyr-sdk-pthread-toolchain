@@ -108,6 +108,9 @@ For other locations, please adjust `scripts/setenv.sh`.
 I have used [crosstools-ng](https://crosstool-ng.github.io/) version 1.28.0,
 build from its [git repo](https://github.com/crosstool-ng/crosstool-ng) as follows.
 
+To install the Debian/Ubuntu prerequisites as described below,
+you may also use [scripts/install-prerequisites.sh](scripts/install-prerequisites.sh).
+
 Install `crosstool-ng` under `/usr/local`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
