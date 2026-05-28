@@ -89,6 +89,7 @@ mkdir -p ${ZEPHYR_SDK_ROOT}
 cd ${ZEPHYR_SDK_ROOT}
 git clone https://github.com/zephyrproject-rtos/sdk-ng
 cd ${ZEPHYR_SDK_WORKSPACE}
+git checkout -b zephyr-threading-01 8191f3ad25827a79bf15dd085823e87d27127d85
 git submodule update --init
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
