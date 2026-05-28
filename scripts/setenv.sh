@@ -5,7 +5,8 @@ export ZEPHYR_SDK_ROOT=/usr/local/projects/OS/zephyrproject-sdk-ng
 export ZEPHYR_SDK_WORKSPACE=${ZEPHYR_SDK_ROOT}/sdk-ng
 export ZEPHYR_BASE=/usr/local/projects/OS/zephyrproject/zephyr
 
-export PATH=/usr/local/bin:${PATH}
+#export PATH=/usr/local/bin:${PATH}
+export PATH=/usr/local/bin:/usr/bin:/bin
 export CT_PREFIX=${HOME}/crosstool-ng
 export CT_LOCAL_TARBALLS_DIR=${CT_PREFIX}/src
 mkdir -p ${CT_LOCAL_TARBALLS_DIR}
