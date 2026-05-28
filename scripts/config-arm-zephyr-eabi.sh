@@ -17,6 +17,7 @@ cp ${ZEPHYR_SDK_INSTALL_DIR}/gnu/arm-zephyr-eabi/arm-zephyr-eabi/include/picolib
 #
 # config
 #
+cd ${rootdir}
 rm -f .config
 cat sections/common.config sections/arm-zephyr-eabi.config > .config
 ct-ng upgradeconfig
