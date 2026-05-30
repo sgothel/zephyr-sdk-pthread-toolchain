@@ -20,6 +20,14 @@
 // Only works with Zephyr pthread patch https://github.com/zephyrproject-rtos/zephyr/pull/109291
 extern k_tid_t pthread_to_zephyr_thread(pthread_t pth);
 
+// #define dbg_PRINT(fmt, ...)
+#define dbg_PRINT(fmt, ...)                                                                        \
+	{                                                                                          \
+		fprintf(stderr, "DBG @ pthread_kthread:%d %s: ", __LINE__, __func__);              \
+		fprintf(stderr, (fmt)__VA_OPT__(, ) __VA_ARGS__);                                  \
+		fputs("\n", stderr);                                                               \
+	}
+
 #define STACKSIZE 2000
 static K_THREAD_STACK_DEFINE(kthread__stack, STACKSIZE);
 

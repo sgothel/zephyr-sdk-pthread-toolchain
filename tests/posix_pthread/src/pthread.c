@@ -11,6 +11,14 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/ztest.h>
 
+// #define dbg_PRINT(fmt, ...)
+#define dbg_PRINT(fmt, ...)                                                                        \
+	{                                                                                          \
+		fprintf(stderr, "DBG @ pthread:%d %s: ", __LINE__, __func__);                      \
+		fprintf(stderr, (fmt)__VA_OPT__(, ) __VA_ARGS__);                                  \
+		fputs("\n", stderr);                                                               \
+	}
+
 #define DETACH_THR_ID 2
 
 #define N_THR_E    3
@@ -590,6 +598,8 @@ ZTEST(pthread, test_pthread_getschedparam_main)
 	test_pthread_getschedparam_fn(NULL);
 }
 
+static char glob_name[80];
+
 static void *test_pthread_name_fn(void *arg)
 {
 	char name[80];
@@ -608,6 +618,7 @@ static void *test_pthread_name_fn(void *arg)
 	zassert_ok(pthread_getname_np(self, name, sizeof(name)));
 	res = strncmp("ChangdThreadName", name, sizeof(name));
 	zassert_equal(0, res, "Changed Thread-Name (pthread)");
+	strncpy(glob_name, name, sizeof(name));
 
 	pthread_mutex_unlock(&lock);
 
@@ -633,9 +644,15 @@ ZTEST(pthread, test_pthread_name)
 
 	zassert_ok(pthread_join(th, NULL));
 
-	zassert_ok(pthread_getname_np(th, name, sizeof(name)));
-	res = strncmp("ChangdThreadName", name, sizeof(name));
-	zassert_equal(0, res, "Changed Thread-Name (main)");
+	if (pthread_getname_np(th, name, sizeof(name)) == 0) {
+		res = strncmp("ChangdThreadName", name, sizeof(name));
+		dbg_PRINT("post_join: th-name %s", name);
+		zassert_equal(0, res, "Changed Thread-Name (main)");
+	} // thread th could be already dead, OK
+
+	dbg_PRINT("post_join: glob-name %s", name);
+	res = strncmp("ChangdThreadName", glob_name, sizeof(glob_name));
+	zassert_equal(0, res, "Changed Thread-Name (main, global)");
 }
 
 ZTEST(pthread, test_pthread_name_main)

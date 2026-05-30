@@ -4,6 +4,11 @@ cmake_minimum_required(VERSION 3.20.0)
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(posix_pthread)
 
+get_filename_component(TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}" DIRECTORY)
+get_filename_component(PROJECT_REPO_ROOT "${TESTS_DIR}" DIRECTORY)
+include(${PROJECT_REPO_ROOT}/cmake/ClangdSetup.cmake)
+ClangdSetup()
+
 FILE(GLOB app_sources src/*.c)
 zephyr_include_directories(${ZEPHYR_BASE}/subsys/portability/posix)
 

@@ -17,6 +17,14 @@
 #include <zephyr/sys/util.h>
 #include <zephyr/ztest.h>
 
+// #define dbg_PRINT(fmt, ...)
+#define dbg_PRINT(fmt, ...)                                                                        \
+	{                                                                                          \
+		fprintf(stderr, "DBG @ pthread_specific:%d %s: ", __LINE__, __func__);             \
+		fprintf(stderr, (fmt)__VA_OPT__(, ) __VA_ARGS__);                                  \
+		fputs("\n", stderr);                                                               \
+	}
+
 #define STACKSIZE 2000
 static K_THREAD_STACK_DEFINE(kthread__stack, STACKSIZE);
 
@@ -25,36 +33,41 @@ static uint8_t const tagP = 0x11U;
 static uint8_t const tagK = 0x22U;
 static uint8_t const tagM = 0x22U;
 
-static void* pthread_entry(void*)
+static void *pthread_entry(void *)
 {
-    pthread_t pself = pthread_self();
-    zassert_not_equal(0, pself);
+	dbg_PRINT("START");
+	pthread_t pself = pthread_self();
+	zassert_not_equal(0, pself);
 
-    uint8_t *val = (uint8_t *)pthread_getspecific(key);
-    zassert_is_null(val);
+	uint8_t *val = (uint8_t *)pthread_getspecific(key);
+	zassert_is_null(val);
 
-    zassert_ok(pthread_setspecific(key, (void *)&tagP));
+	zassert_ok(pthread_setspecific(key, (void *)&tagP));
 
-    val = (uint8_t *)pthread_getspecific(key);
-    zassert_not_null(val);
-    zassert_equal_ptr(val, &tagP);
-    zassert_equal(*val, tagP);
-    return NULL;
+	val = (uint8_t *)pthread_getspecific(key);
+	zassert_not_null(val);
+	zassert_equal_ptr(val, &tagP);
+	zassert_equal(*val, tagP);
+	dbg_PRINT("END");
+	return NULL;
 }
 
-static void kthread_entry() {
-    pthread_t pself = pthread_self();
-    zassert_not_equal(0, pself);
+static void kthread_entry()
+{
+	dbg_PRINT("START");
+	pthread_t pself = pthread_self();
+	zassert_not_equal(0, pself);
 
-    uint8_t *val = (uint8_t *)pthread_getspecific(key);
-    zassert_is_null(val);
+	uint8_t *val = (uint8_t *)pthread_getspecific(key);
+	zassert_is_null(val);
 
-    zassert_ok(pthread_setspecific(key, (void *)&tagK));
+	zassert_ok(pthread_setspecific(key, (void *)&tagK));
 
-    val = (uint8_t *)pthread_getspecific(key);
-    zassert_not_null(val);
-    zassert_equal_ptr(val, &tagK);
-    zassert_equal(*val, tagK);
+	val = (uint8_t *)pthread_getspecific(key);
+	zassert_not_null(val);
+	zassert_equal_ptr(val, &tagK);
+	zassert_equal(*val, tagK);
+	dbg_PRINT("END");
 }
 
 ZTEST(pthread_specific, test_pthread_specific_pkthread)
@@ -62,6 +75,7 @@ ZTEST(pthread_specific, test_pthread_specific_pkthread)
 	pthread_t pthread_thread;
 	struct k_thread kthread_thread;
 
+	dbg_PRINT("START");
 	zassert_ok(pthread_key_create(&key, NULL));
 
 	uint8_t *val = (uint8_t *)pthread_getspecific(key);
@@ -83,16 +97,17 @@ ZTEST(pthread_specific, test_pthread_specific_pkthread)
 		zassert_ok(pthread_join(pthread_thread, NULL));
 		zassert_ok(k_thread_join(&kthread_thread, K_FOREVER));
 	}
+	dbg_PRINT("END");
 }
 
 static void before(void *arg)
 {
-    ARG_UNUSED(arg);
+	ARG_UNUSED(arg);
 
-    if (!IS_ENABLED(CONFIG_DYNAMIC_THREAD)) {
-        /* skip redundant testing if there is no thread pool / heap allocation */
-        ztest_test_skip();
-    }
+	if (!IS_ENABLED(CONFIG_DYNAMIC_THREAD)) {
+		/* skip redundant testing if there is no thread pool / heap allocation */
+		ztest_test_skip();
+	}
 }
 
 ZTEST_SUITE(pthread_specific, NULL, NULL, before, NULL, NULL);
