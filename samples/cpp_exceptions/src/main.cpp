@@ -531,12 +531,13 @@ int main()
     {
       fmt_ABORT("exception not RuntimeException but `%s`", typeid(e).name()); // ERROR-2, if USE_RETHROW_EXCEPTION
     }
+    dbg_PRINT("MAIN: XXX");
+    return 0;
   } catch (...) {
     std::exception_ptr eptr = std::current_exception();
     util::handle_exception(eptr, E_FILE_LINE);
     src_ABORT();
   }
-  dbg_PRINT("MAIN: XXX");
-
+  src_ABORT();
   return 0;
 }
