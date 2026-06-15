@@ -5,12 +5,16 @@ rootdir=`dirname $sdir`
 
 source ${sdir}/setenv-run.sh
 
-# platform="mps2/an385"
-platform="qemu_cortex_r5/zynqmp_rpu"
+# platform="qemu_x86_64/atom"
+platform="mps2/an385"
+# platform="qemu_cortex_r5/zynqmp_rpu"
 
-# west twister -p ${platform} -s posix.pthread.dynamic_stack -T tests/posix_pthread
-# west twister -p ${platform} -T tests/posix_pthread
-west twister -p ${platform} -T tests/cpp_pthread
+which qemu
+
+# west twister -p ${platform} -s pthread.dynamic_stack -T tests/pthread
+# west twister -p ${platform} -T tests/pthread
+# west twister -p ${platform} -T tests/cpp
+west twister -p ${platform} -T tests
 
 # Zephyr
 # west twister -p ${platform} -T tests/subsys/portability/posix/common

@@ -2,7 +2,6 @@ common:
   tags:
     - posix
     - pthread
-    - cpp
   min_ram: 64
   timeout: 240
   # 1 tier0 platform per supported architecture
@@ -11,14 +10,14 @@ common:
     - simulation
   filter: not CONFIG_NATIVE_LIBC
 tests:
-  posix.pthread.dynamic_stack:
+  pthread.dynamic_stack:
     extra_configs:
       - CONFIG_DYNAMIC_THREAD=y
       - CONFIG_THREAD_STACK_INFO=y
       - CONFIG_HEAP_MEM_POOL_SIZE=16384
       - CONFIG_POSIX_THREAD_KEYS_MAX=2048
       - CONFIG_TEST_EXTRA_STACK_SIZE=16384
-  posix.pthread.dynamic_stack.tls:
+  pthread.dynamic_stack.tls:
     platform_exclude:
       - intel_ehl_crb
     filter: CONFIG_ARCH_HAS_THREAD_LOCAL_STORAGE and CONFIG_TOOLCHAIN_SUPPORTS_THREAD_LOCAL_STORAGE
@@ -29,3 +28,7 @@ tests:
       - CONFIG_HEAP_MEM_POOL_SIZE=16384
       - CONFIG_POSIX_THREAD_KEYS_MAX=2048
       - CONFIG_TEST_EXTRA_STACK_SIZE=16384
+  pthread.static_stack:
+    extra_configs:
+      - CONFIG_DYNAMIC_THREAD=n
+      - CONFIG_THREAD_STACK_INFO=n
