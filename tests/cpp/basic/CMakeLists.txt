@@ -10,6 +10,8 @@ get_filename_component(PROJECT_REPO_ROOT "${TEMPDIR1}" DIRECTORY)
 include(${PROJECT_REPO_ROOT}/cmake/ClangdSetup.cmake)
 ClangdSetup()
 
+add_compile_options(-g -ggdb -DDEBUG)
+
 # Generate zephyr/heap_constants.h first
 # https://docs.zephyrproject.org/latest/releases/migration-guide-4.4.html#kernel
 add_dependencies(app zephyr_generated_headers)

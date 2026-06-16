@@ -11,7 +11,7 @@
  * you can obtain one at https://opensource.org/license/mit/.
  */
 
-#include "zephyr/ztest_assert.h"
+#include <zephyr/ztest_assert.h>
 #include <zephyr/kernel.h>
 #include <zephyr/sys/util.h>
 #include <zephyr/ztest.h>
@@ -169,7 +169,6 @@ ZTEST(cpp_basic_alloc_new, test_new_obj_OOM)
 static void before(void *arg)
 {
 	ARG_UNUSED(arg);
-	// No constraints
 	if (!IS_ENABLED(CONFIG_COMMON_LIBC_MALLOC)) {
 		ztest_test_skip();
 	}
