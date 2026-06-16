@@ -12,9 +12,13 @@ platform="mps2/an385"
 which qemu
 
 # west twister -p ${platform} -s pthread.dynamic_stack -T tests/pthread
-# west twister -p ${platform} -T tests/pthread
-# west twister -p ${platform} -T tests/cpp
-west twister -p ${platform} -T tests
 
-# Zephyr
-# west twister -p ${platform} -T tests/subsys/portability/posix/common
+west twister -p ${platform} -T tests
+# west twister -p ${platform} -T tests/pthread
+# west twister -p ${platform} -T tests/cpp/
+# west twister -p ${platform} -T tests/cpp/concurrency
+# west twister -p ${platform} -T tests/cpp/basic
+
+#west build -p -t run -b ${platform} tests/cpp/basic -T cpp.basic.dynamic_stack.tls
+#west build -p -t debugserver_qemu -b ${platform} tests/cpp/basic -T cpp.basic.dynamic_stack.tls
+

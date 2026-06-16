@@ -64,7 +64,7 @@ InlayHints:
   Enabled: Yes
   BlockEnd: Yes
   Designators: Yes
-  ParameterNames: Yes
+  ParameterNames: No
   DeducedTypes: Yes
   TypeNameLimit: 24
 

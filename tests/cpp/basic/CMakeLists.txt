@@ -2,10 +2,11 @@
 
 cmake_minimum_required(VERSION 3.20.0)
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
-project(cpp_pthread)
+project(cpp_basic)
 
 get_filename_component(TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}" DIRECTORY)
-get_filename_component(PROJECT_REPO_ROOT "${TESTS_DIR}" DIRECTORY)
+get_filename_component(TEMPDIR1 "${TESTS_DIR}" DIRECTORY)
+get_filename_component(PROJECT_REPO_ROOT "${TEMPDIR1}" DIRECTORY)
 include(${PROJECT_REPO_ROOT}/cmake/ClangdSetup.cmake)
 ClangdSetup()
 
