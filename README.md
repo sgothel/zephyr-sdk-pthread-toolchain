@@ -27,8 +27,9 @@ CONFIG_THREAD_NAME=y
 
 ## Solution
 ### Zephyr `pthread` patch
-Only a minimal Zephyr PR, see [pthread: Support handling Zephyr native threads #109291](https://github.com/zephyrproject-rtos/zephyr/pull/109291)
-is required to make its `pthread` implementation functional for this purpose.
+Only a few minimal Zephyr PRs are required to make its `pthread` implementation functional for this purpose:
+- [pthread: Support handling Zephyr native threads #109291](https://github.com/zephyrproject-rtos/zephyr/pull/109291)
+- [posix: cond: Allow statically initialized cond to pthread_cond_broadcast](https://github.com/zephyrproject-rtos/zephyr/pull/111547)
 
 ### Injected Zephyr `pthread.h` header
 To build the toolchain w/ the Zephyr `pthread` header, the [amalgamated pthread.h](include/inject/zephyr/pthread.h)
