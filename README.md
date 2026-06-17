@@ -29,7 +29,12 @@ CONFIG_THREAD_NAME=y
 ### Zephyr `pthread` patches
 Only a few minimal Zephyr PRs are required to make its `pthread` implementation functional for this purpose:
 - [pthread: Support handling Zephyr native threads #109291](https://github.com/zephyrproject-rtos/zephyr/pull/109291)
+  - Branch [zephyr-threading-01](https://github.com/sgothel/zephyr/tree/zephyr-threading-01)
 - [posix: cond: Allow statically initialized cond to pthread_cond_broadcast #111547](https://github.com/zephyrproject-rtos/zephyr/pull/111547)
+  - Branch [zephyr-pthread_cond_broadcast](https://github.com/sgothel/zephyr/tree/zephyr-pthread_cond_broadcast)
+
+I provide an [almagated branch](https://github.com/sgothel/zephyr/tree/zephyr-threading-almagated) including
+above PR branches for testing convenience.
 
 ### Injected Zephyr `pthread.h` header
 To build the toolchain w/ the Zephyr `pthread` header, the [amalgamated pthread.h](include/inject/zephyr/pthread.h)
