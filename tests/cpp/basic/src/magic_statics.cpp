@@ -20,6 +20,9 @@
 #include <cstddef>
 #include <cstdint>
 
+// GNU C++ Library hooks for magic statics
+// #include <ext/concurrence.h>
+
 // #define dbg_PRINT(fmt, ...)
 #define dbg_PRINT(fmt, ...)                                                                        \
 	{                                                                                          \
@@ -87,6 +90,8 @@ static void before(void *arg)
 {
 	ARG_UNUSED(arg);
 	// No constraints
+	// CONFIG_MAX_PTHREAD_COND_COUNT 5 (default)
+	dbg_PRINT("CONFIG_MAX_PTHREAD_COND_COUNT %d", CONFIG_MAX_PTHREAD_COND_COUNT);
 }
 
 ZTEST_SUITE(cpp_basic_magic_statics, NULL, NULL, before, NULL, NULL);
