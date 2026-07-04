@@ -287,7 +287,7 @@ static void Thread2Inner()
 			if (thirteen == 13U) {
 				dbg_PRINT("T2i: p2c"); // NOLINT
 				const pthread_t self = pthread_self();
-				dbg_PRINT("T2i: p2d 0x%zx", self); // NOLINT
+				dbg_PRINT("T2i: p2d %p", (void*)self); // NOLINT
 				zassert_not_equal(0, self);
 				throw RuntimeException(ExceptionA_ID, ExceptionA_Name, E_FILE_LINE);
 			}
@@ -383,7 +383,7 @@ ZTEST(cpp_exceptions, test_cpp_exceptions01)
 			dbg_PRINT("MAIN: p2a");
 			{
 				const pthread_t self = pthread_self();
-				dbg_PRINT("MAIN: p2b 0x%zx", self);
+				dbg_PRINT("MAIN: p2b 0x%p", (void*)self);
 				zassert_not_equal(0, self);
 			}
 			{
@@ -392,7 +392,7 @@ ZTEST(cpp_exceptions, test_cpp_exceptions01)
 				if (thirteen == 13U) {
 					dbg_PRINT("MAIN: p2c"); // NOLINT
 					const pthread_t self = pthread_self();
-					dbg_PRINT("MAIN: p2d 0x%zx", self); // NOLINT
+					dbg_PRINT("MAIN: p2d 0x%p", (void*)self); // NOLINT
 					zassert_not_equal(0, self);
 					throw RuntimeException(ExceptionB_ID, ExceptionB_Name,
 							       E_FILE_LINE);
