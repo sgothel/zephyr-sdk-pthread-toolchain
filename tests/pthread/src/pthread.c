@@ -79,7 +79,7 @@ static void *thread_top_exec(void *p1)
 	 */
 	pthread_mutex_lock(&lock);
 
-	if (!pthread_mutex_trylock(&lock)) {
+	if (!pthread_mutex_trylock(&lock)) { /* NOSONAR */
 		printk("pthread_mutex_trylock inexplicably succeeded\n");
 		bounce_failed = 1;
 	}
@@ -481,10 +481,11 @@ static void cleanup_handler(void *arg)
 	*boolp = true;
 }
 
-static void *test_pthread_cleanup_entry_explicit(void *)
+static void *test_pthread_cleanup_entry_explicit(void *arg)
 {
 	bool executed[2] = {false, false};
 
+	ARG_UNUSED(arg);
 	pthread_cleanup_push(cleanup_handler, &executed[0]);
 	pthread_cleanup_push(cleanup_handler, &executed[1]);
 	pthread_cleanup_pop(false);
@@ -521,9 +522,10 @@ static void *test_pthread_cleanup_entry_cancelsync(void *arg)
 	pthread_cleanup_push(cleanup_handler, executedp + 0); /* NOSONAR */
 	pthread_cleanup_push(cleanup_handler, executedp + 1); /* NOSONAR */
 
-	while (!atomic_test_bit(&test_cleanup_flags, TEST_CLEANUP_DONE_BIT)) {
-		/* will exit this user thread-func and execute cleanup-handler */
+	while (true) {
+		/* Will exit this user thread-func and execute cleanup-handler. */
 		pthread_testcancel();
+		k_yield(); /* be more cooperative */
 	}
 
 	pthread_cleanup_pop(false);
@@ -576,7 +578,6 @@ ZTEST(pthread, test_pthread_cleanup2_cancel_sync)
 	bool executed[2] = {false, false};
 	void *retval = NULL;
 
-	atomic_clear_bit(&test_cleanup_flags, TEST_CLEANUP_DONE_BIT);
 	zassert_ok(pthread_create(&th, NULL, test_pthread_cleanup_entry_cancelsync, executed));
 	zassert_ok(pthread_cancel(th));
 	zassert_ok(pthread_join(th, &retval));
@@ -602,7 +603,7 @@ ZTEST(pthread, test_pthread_cleanup3_return)
 static bool testcancel_ignored;
 static bool testcancel_failed;
 
-static void *test_pthread_cancel_fn(void *arg)
+static void *test_pthread_cancel0_self_fn(void *arg)
 {
 	zassert_ok(pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL));
 
@@ -625,17 +626,99 @@ static void *test_pthread_cancel_fn(void *arg)
 	pthread_testcancel();
 
 	testcancel_failed = true;
+	zassert_unreachable();
 
 	return NULL;
 }
 
-ZTEST(pthread, test_pthread_testcancel)
+ZTEST(pthread, test_pthread_testcancel0_self)
 {
 	pthread_t th;
+	void *retval = NULL;
 
-	zassert_ok(pthread_create(&th, NULL, test_pthread_cancel_fn, NULL));
-	zassert_ok(pthread_join(th, NULL));
+	zassert_ok(pthread_create(&th, NULL, test_pthread_cancel0_self_fn, NULL));
+	zassert_ok(pthread_join(th, &retval));
+	zassert_equal_ptr(retval, PTHREAD_CANCELED);
 	zassert_true(testcancel_ignored);
+	zassert_false(testcancel_failed);
+}
+
+static atomic_t test_cancel_flags = ATOMIC_INIT(0);
+#define TEST_CANCEL_ENABLED_BIT 0
+#define TEST_CANCEL_SET_BIT     1
+
+static void *test_pthread_cancel1_ext_fn(void *arg)
+{
+	zassert_ok(pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL));
+
+	testcancel_ignored = false;
+
+	/* this should be ignored */
+	pthread_testcancel();
+
+	testcancel_ignored = true;
+
+	/* enable the thread to be cancelled */
+	zassert_ok(pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL));
+	atomic_set_bit(&test_cancel_flags, TEST_CANCEL_ENABLED_BIT);
+	while (!atomic_test_bit(&test_cancel_flags, TEST_CANCEL_SET_BIT)) {
+		k_yield();
+	}
+
+	testcancel_failed = false;
+
+	/* this should terminate the thread */
+	pthread_testcancel();
+
+	testcancel_failed = true;
+	zassert_unreachable();
+
+	return NULL;
+}
+
+ZTEST(pthread, test_pthread_testcancel1_ext)
+{
+	pthread_t th;
+	void *retval = NULL;
+
+	atomic_clear(&test_cancel_flags);
+	zassert_ok(pthread_create(&th, NULL, test_pthread_cancel1_ext_fn, NULL));
+	while (!atomic_test_bit(&test_cancel_flags, TEST_CANCEL_ENABLED_BIT)) {
+		k_yield();
+	}
+	zassert_ok(pthread_cancel(th));
+	atomic_set_bit(&test_cancel_flags, TEST_CANCEL_SET_BIT);
+	zassert_ok(pthread_join(th, &retval));
+	zassert_equal_ptr(retval, PTHREAD_CANCELED);
+	zassert_true(testcancel_ignored);
+	zassert_false(testcancel_failed);
+}
+
+static void *test_pthread_cancel2_ext_fn(void *arg)
+{
+	testcancel_failed = false;
+
+	while (true) {
+		/* this should terminate the thread */
+		pthread_testcancel();
+		k_yield(); /* be more cooperative */
+	}
+
+	testcancel_failed = true;
+	zassert_unreachable();
+
+	return NULL;
+}
+
+ZTEST(pthread, test_pthread_testcancel2_ext)
+{
+	pthread_t th;
+	void *retval = NULL;
+
+	zassert_ok(pthread_create(&th, NULL, test_pthread_cancel2_ext_fn, NULL));
+	zassert_ok(pthread_cancel(th));
+	zassert_ok(pthread_join(th, &retval));
+	zassert_equal_ptr(retval, PTHREAD_CANCELED);
 	zassert_false(testcancel_failed);
 }
 
@@ -696,7 +779,7 @@ ZTEST(pthread, test_pthread_getschedparam_main)
 	test_pthread_getschedparam_fn(NULL);
 }
 
-static char glob_name[80];
+static char pthread_name_glob_name[80];
 
 static void *test_pthread_name_fn(void *arg)
 {
@@ -716,7 +799,7 @@ static void *test_pthread_name_fn(void *arg)
 	zassert_ok(pthread_getname_np(self, name, sizeof(name)));
 	res = strncmp("ChangdThreadName", name, sizeof(name));
 	zassert_equal(0, res, "Changed Thread-Name (pthread)");
-	strncpy(glob_name, name, sizeof(name));
+	strncpy(pthread_name_glob_name, name, sizeof(name));
 
 	pthread_mutex_unlock(&lock);
 
@@ -746,10 +829,10 @@ ZTEST(pthread, test_pthread_name)
 		res = strncmp("ChangdThreadName", name, sizeof(name));
 		dbg_PRINT("post_join: th-name %s", name);
 		zassert_equal(0, res, "Changed Thread-Name (main)");
-	} // thread th could be already dead, OK
+	} /* else thread th could be already dead, OK */
 
 	dbg_PRINT("post_join: glob-name %s", name);
-	res = strncmp("ChangdThreadName", glob_name, sizeof(glob_name));
+	res = strncmp("ChangdThreadName", pthread_name_glob_name, sizeof(pthread_name_glob_name));
 	zassert_equal(0, res, "Changed Thread-Name (main, global)");
 }
 
@@ -758,6 +841,7 @@ ZTEST(pthread, test_pthread_name_main)
 	char name[80];
 	int res;
 	pthread_t self = pthread_self();
+
 	zassert_not_equal(0, self);
 
 	zassert_ok(pthread_setname_np(self, "MainThreadName"));
@@ -770,6 +854,11 @@ static void before(void *arg)
 {
 	ARG_UNUSED(arg);
 
+	if (IS_ENABLED(CONFIG_DYNAMIC_THREAD)) {
+		dbg_PRINT("CONFIG_SMP enabled");
+	} else {
+		dbg_PRINT("CONFIG_SMP disabled");
+	}
 	if (!IS_ENABLED(CONFIG_DYNAMIC_THREAD)) {
 		/* skip redundant testing if there is no thread pool / heap allocation */
 		ztest_test_skip();
