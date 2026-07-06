@@ -96,11 +96,13 @@ Zephyr implements C11 threads via pthread, see source code
 ## Thread-Safety w/ C and C++
 ### Kconfig
 - `CONFIG_COMMON_LIBC_THRD` C11 threads
-- `CONFIG_COMMON_LIBC_ASCTIME_R`Thread-safe version of asctime()
-- `CONFIG_COMMON_LIBC_CTIME_R` Thread-safe version of ctime()
 - `CONFIG_POSIX_C_LANG_SUPPORT_R` Thread-Safe General ISO C Library
 - `CONFIG_POSIX_FILE_SYSTEM_R` Thread-Safe File System
 - `CONFIG_POSIX_THREAD_SAFE_FUNCTIONS` POSIX thread-safe functions
+
+Do **not** enable the following, leading to unsafe functions and compile-time warnings
+- `CONFIG_COMMON_LIBC_ASCTIME_R`
+- `CONFIG_COMMON_LIBC_CTIME_R`
 
 ### Discussions and Issues
 - [Thread-safety of C-Library and C++ runtime #105427](https://github.com/zephyrproject-rtos/zephyr/issues/105427)
