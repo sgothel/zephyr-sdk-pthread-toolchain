@@ -37,6 +37,9 @@ Only a few minimal Zephyr PRs are required to make its `pthread` implementation 
 - [pthread: Unwind & execute all cleanup handler where required #112736](https://github.com/zephyrproject-rtos/zephyr/pull/112736)
   - Branch [zephyr-pthread_cleanup](https://github.com/sgothel/zephyr/tree/zephyr-pthread_cleanup)
   - Is on top of branch [zephyr-threading-01](https://github.com/sgothel/zephyr/tree/zephyr-threading-01), i.e. included
+- [posix: pthread: Remove all key associated references in thread-pool #112960](https://github.com/zephyrproject-rtos/zephyr/pull/112960)
+  - Branch [zephyr-pthread_specific](https://github.com/sgothel/zephyr/tree/zephyr-pthread_specific)
+  - Is on top of branch [zephyr-pthread_cleanup](https://github.com/sgothel/zephyr/tree/zephyr-pthread_cleanup)
 
 I provide an [almagated branch](https://github.com/sgothel/zephyr/tree/zephyr-threading-almagated) including
 above PR branches for testing convenience.
