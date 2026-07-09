@@ -1,13 +1,13 @@
 /*
-* Copyright (c) 2026 Göthel Software
-*
-* SPDX-License-Identifier: Apache-2.0 OR MIT
-*
-* If a copy of the Apache-2.0 license was not distributed with this file,
-* You can obtain one at https://www.apache.org/licenses/LICENSE-2.0.
-*
-* If a copy of the MIT license was not distributed with this file,
-* you can obtain one at https://opensource.org/license/mit/.
+ * Copyright (c) 2026 Göthel Software
+ *
+ * SPDX-License-Identifier: Apache-2.0 OR MIT
+ *
+ * If a copy of the Apache-2.0 license was not distributed with this file,
+ * You can obtain one at https://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * If a copy of the MIT license was not distributed with this file,
+ * you can obtain one at https://opensource.org/license/mit/.
  */
 
 #ifdef __ZEPHYR__

@@ -40,6 +40,9 @@ Only a few minimal Zephyr PRs are required to make its `pthread` implementation 
 - [posix: pthread: Remove all key associated references in thread-pool #112960](https://github.com/zephyrproject-rtos/zephyr/pull/112960)
   - Branch [zephyr-pthread_specific](https://github.com/sgothel/zephyr/tree/zephyr-pthread_specific)
   - Is on top of branch [zephyr-pthread_cleanup](https://github.com/sgothel/zephyr/tree/zephyr-pthread_cleanup)
+- [posix: pthread: Fix pthread_once by adding wait-state for concurrent thread #113166](https://github.com/zephyrproject-rtos/zephyr/pull/113166)
+  - Branch [zephyr-pthread_once](https://github.com/sgothel/zephyr/tree/zephyr-pthread_once)
+  - Is on top of branch [zephyr-pthread_specific](https://github.com/sgothel/zephyr/tree/zephyr-pthread_specific)
 
 I provide an [almagated branch](https://github.com/sgothel/zephyr/tree/zephyr-threading-almagated) including
 above PR branches for testing convenience.
