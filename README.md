@@ -201,35 +201,35 @@ sudo make install
 Brief description of building the toolchain and installing it over the pre-existing SDK
 for tested target-platforms.
 
+Note: Each of the used scripts below source (read and evaluate)
+the `scripts/setenv.sh` to setup required environment variables
+as described above.
+
 #### `arm-zephyr-eabi`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
 ./scripts/config-arm-zephyr-eabi.sh
-ct-ng build
-
+./scripts/build.sh
 ./scripts/install-arm-zephyr-eabi.sh
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### `aarch64-zephyr-elf`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
 ./scripts/config-aarch64-zephyr-elf.sh
-ct-ng build
-
+./scripts/build.sh
 ./scripts/install-aarch64-zephyr-elf.sh
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### `riscv64-zephyr-elf`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
 ./scripts/config-riscv64-zephyr-elf.sh
-ct-ng build
-
+./scripts/build.sh
 ./scripts/install-riscv64-zephyr-elf.sh
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### `x86_64-zephyr-elf`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
 ./scripts/config-x86_64-zephyr-elf.sh
-ct-ng build
-
+./scripts/build.sh
 ./scripts/install-x86_64-zephyr-elf.sh
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
