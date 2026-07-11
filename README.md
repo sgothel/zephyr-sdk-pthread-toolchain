@@ -101,9 +101,9 @@ Having issues still
     - `tests/cpp/basic/src/alloc_new.cpp`
 - `x86_64-zephyr-elf`
   - `qemu_x86_64/atom`
-    - C++ exceptions
+    - C++ exception unwinding (ABI) issue
   - `qemu_x86/atom`
-    - C++ exceptions
+    - C++ exception unwinding (ABI) issue
 
 ## Previous Work
 [OS Issue 25569](https://github.com/zephyrproject-rtos/zephyr/issues/25569)
