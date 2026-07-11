@@ -233,7 +233,7 @@ class RuntimeException: public std::logic_error
 	}
 };
 
-static void Test_cpp_ExceptionBasics()
+ZTEST(cpp_exceptions, test_cpp_exceptions00)
 {
 	{
 		dbg_PRINT("Size: RuntimeException %zu (/ %zu sizeof(void*) = %zu)]",
@@ -275,6 +275,91 @@ static void Test_cpp_ExceptionBasics()
 		zassert_true(e.match(ExceptionB_ID, ExceptionB_Name));
 		zassert_equal(typeid(e), typeid(RuntimeException));
 	}
+	volatile unsigned int cookie1a = CookieAValue;
+	volatile unsigned int cookie1b = CookieBValue;
+	try {
+		try {
+			{
+				const pthread_t self = pthread_self();
+				dbg_PRINT("p0e 0x%p", (void*)(size_t)self); // NOLINT
+				zassert_not_equal(0, self);
+				throw RuntimeException(ExceptionB_ID, ExceptionB_Name, E_FILE_LINE);
+			};
+		} catch (RuntimeException const &e) {
+			volatile unsigned int cookie2a = CookieAValue;
+			volatile unsigned int cookie2b = CookieBValue;
+			e.cookiesAssert(__LINE__);
+			dbg_PRINT("p0f: %s, id `%s`, hash 0x%zx", e.toString().c_str(),
+				  typeid(e).name(), typeid(e).hash_code());
+			zassert_true(e.match(ExceptionB_ID, ExceptionB_Name));
+			dbg_PRINT("p0g");
+			zassert_equal(typeid(e), typeid(RuntimeException));
+			dbg_PRINT("p0h");
+
+			zassert_equal(CookieAValue, cookie1a);
+			zassert_equal(CookieBValue, cookie1b);
+			zassert_equal(CookieAValue, cookie2a);
+			zassert_equal(CookieBValue, cookie2b);
+
+			e.cookiesAssert(__LINE__);
+			dbg_PRINT("p0i: %s, id `%s`, hash 0x%zx", e.toString().c_str(),
+				  typeid(e).name(), typeid(e).hash_code());
+			zassert_true(e.match(ExceptionB_ID, ExceptionB_Name));
+			dbg_PRINT("p0j");
+			zassert_equal(typeid(e), typeid(RuntimeException));
+
+			dbg_PRINT("p0k");
+			throw RuntimeException(ExceptionC_ID, ExceptionC_Name, E_FILE_LINE);
+		} catch (...) {
+			std::exception_ptr eptr = std::current_exception();
+			handle_exception(eptr, E_FILE_LINE);
+			zassert_unreachable();
+		}
+		zassert_unreachable();
+	} catch (RuntimeException const &e) {
+		volatile unsigned int cookie2a = CookieAValue;
+		volatile unsigned int cookie2b = CookieBValue;
+		e.cookiesAssert(__LINE__);
+		dbg_PRINT("p0l: %s, id `%s`, hash 0x%zx", e.toString().c_str(),
+			  typeid(e).name(), typeid(e).hash_code());
+		zassert_true(e.match(ExceptionC_ID, ExceptionC_Name));
+		dbg_PRINT("p0m");
+		zassert_equal(typeid(e), typeid(RuntimeException));
+
+		SetStateSignalAndWait(State::WaitingForThread2_Terminate,
+				      State::WaitingForThread2_Terminate);
+
+		zassert_equal(CookieAValue, cookie1a);
+		zassert_equal(CookieBValue, cookie1b);
+		zassert_equal(CookieAValue, cookie2a);
+		zassert_equal(CookieBValue, cookie2b);
+
+		e.cookiesAssert(__LINE__);
+		dbg_PRINT("p0n: %s, id `%s`, hash 0x%zx", e.toString().c_str(),
+			  typeid(e).name(), typeid(e).hash_code());
+		zassert_true(e.match(ExceptionC_ID, ExceptionC_Name));
+		dbg_PRINT("p0o");
+		zassert_equal(typeid(e), typeid(RuntimeException));
+
+		zassert_equal(CookieAValue, cookie1a);
+		zassert_equal(CookieBValue, cookie1b);
+		zassert_equal(CookieAValue, cookie2a);
+		zassert_equal(CookieBValue, cookie2b);
+
+		e.cookiesAssert(__LINE__);
+		dbg_PRINT("p0p: %s, id `%s`, hash 0x%zx", e.toString().c_str(),
+			  typeid(e).name(), typeid(e).hash_code());
+		zassert_true(e.match(ExceptionC_ID, ExceptionC_Name));
+		dbg_PRINT("p0q");
+		zassert_equal(typeid(e), typeid(RuntimeException));
+		dbg_PRINT("p0r XXX");
+		return;
+	} catch (...) {
+		std::exception_ptr eptr = std::current_exception();
+		handle_exception(eptr, E_FILE_LINE);
+		zassert_unreachable();
+	}
+	zassert_unreachable();
 }
 
 static void Thread2Inner()
@@ -287,7 +372,7 @@ static void Thread2Inner()
 			if (thirteen == 13U) {
 				dbg_PRINT("T2i: p2c"); // NOLINT
 				const pthread_t self = pthread_self();
-				dbg_PRINT("T2i: p2d %p", (void*)self); // NOLINT
+				dbg_PRINT("T2i: p2d %p", (void*)(size_t)self); // NOLINT
 				zassert_not_equal(0, self);
 				throw RuntimeException(ExceptionA_ID, ExceptionA_Name, E_FILE_LINE);
 			}
@@ -297,6 +382,7 @@ static void Thread2Inner()
 		// # Point A #
 		// ###########
 		[[maybe_unused]] std::exception_ptr eptr;
+		eptr = std::current_exception();
 		e.cookiesAssert(__LINE__);
 		dbg_PRINT("T2i: p3: %s, id `%s`, hash 0x%zx", e.toString().c_str(),
 			  typeid(e).name(), typeid(e).hash_code());
@@ -313,13 +399,14 @@ static void Thread2Inner()
 		zassert_equal(typeid(e), typeid(RuntimeException));
 
 		dbg_PRINT("T2i: p5");
-		throw; // ERROR-1
+		std::rethrow_exception(eptr);
+		// throw; // ERROR-1
 	} catch (...) {
 		std::exception_ptr eptr = std::current_exception();
 		handle_exception(eptr, E_FILE_LINE);
-		zassert_true(false);
+		zassert_unreachable();
 	}
-	zassert_true(false);
+	zassert_unreachable();
 }
 
 static void *Thread2Entry(void *)
@@ -363,9 +450,7 @@ static void *Thread2Entry(void *)
 ZTEST(cpp_exceptions, test_cpp_exceptions01)
 {
 	dbg_PRINT("MAIN: START");
-	Test_cpp_ExceptionBasics();
 
-	dbg_PRINT("MAIN: p0b");
 	SetStateSignalAndWait(State::WaitingForThread2_ProceedTo_A,
 			      State::WaitingForThread2_ProceedTo_A);
 
@@ -383,7 +468,7 @@ ZTEST(cpp_exceptions, test_cpp_exceptions01)
 			dbg_PRINT("MAIN: p2a");
 			{
 				const pthread_t self = pthread_self();
-				dbg_PRINT("MAIN: p2b 0x%p", (void*)self);
+				dbg_PRINT("MAIN: p2b 0x%p", (void*)(size_t)self);
 				zassert_not_equal(0, self);
 			}
 			{
@@ -392,7 +477,7 @@ ZTEST(cpp_exceptions, test_cpp_exceptions01)
 				if (thirteen == 13U) {
 					dbg_PRINT("MAIN: p2c"); // NOLINT
 					const pthread_t self = pthread_self();
-					dbg_PRINT("MAIN: p2d 0x%p", (void*)self); // NOLINT
+					dbg_PRINT("MAIN: p2d 0x%p", (void*)(size_t)self); // NOLINT
 					zassert_not_equal(0, self);
 					throw RuntimeException(ExceptionB_ID, ExceptionB_Name,
 							       E_FILE_LINE);
@@ -430,9 +515,9 @@ ZTEST(cpp_exceptions, test_cpp_exceptions01)
 		} catch (...) {
 			std::exception_ptr eptr = std::current_exception();
 			handle_exception(eptr, E_FILE_LINE);
-			zassert_true(false);
+			zassert_unreachable();
 		}
-		zassert_true(false);
+		zassert_unreachable();
 	} catch (RuntimeException const &e) {
 		volatile unsigned int cookie2a = CookieAValue;
 		volatile unsigned int cookie2b = CookieBValue;
@@ -478,17 +563,31 @@ ZTEST(cpp_exceptions, test_cpp_exceptions01)
 	} catch (...) {
 		std::exception_ptr eptr = std::current_exception();
 		handle_exception(eptr, E_FILE_LINE);
-		zassert_true(false);
+		zassert_unreachable();
 	}
-	zassert_true(false);
+	zassert_unreachable();
 }
 
 static void before(void *arg)
 {
 	ARG_UNUSED(arg);
 
+	dbg_PRINT("CONFIG_MULTITHREADING %d", IS_ENABLED(CONFIG_MULTITHREADING));
+	dbg_PRINT("CONFIG_SMP %d", IS_ENABLED(CONFIG_SMP));
+	dbg_PRINT("CONFIG_64BIT %d", IS_ENABLED(CONFIG_64BIT));
+	dbg_PRINT("CONFIG_ARCH %s", CONFIG_ARCH);
+	dbg_PRINT("[arm %d, arm64 %d, riscv %d, x86 %d]", 
+		IS_ENABLED(CONFIG_ARM),
+		IS_ENABLED(CONFIG_ARM64),
+		IS_ENABLED(CONFIG_RISCV),
+		IS_ENABLED(CONFIG_X86));
+
 	if (!IS_ENABLED(CONFIG_DYNAMIC_THREAD)) {
 		/* skip redundant testing if there is no thread pool / heap allocation */
+		ztest_test_skip();
+	}
+	if (false && IS_ENABLED(CONFIG_X86)) {
+		/* x86_64 toolchain issues w/ catching exceptions on a pthread */
 		ztest_test_skip();
 	}
 }
