@@ -1,6 +1,7 @@
 /Debug*/
 /Release*/
 build*/
+ct_build*/
 .build*/
 twister-out*/
 dist*/
