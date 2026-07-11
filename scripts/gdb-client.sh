@@ -7,6 +7,8 @@ rootdir=`dirname $sdir`
 ZEPHYR_SDK_INSTALL_DIR=/home/sven/zephyr-sdk-1.0.1-mixed
 
 GDB_EXE=${ZEPHYR_SDK_INSTALL_DIR}/gnu/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb
+#GDB_EXE=${ZEPHYR_SDK_INSTALL_DIR}/gnu/aarch64-zephyr-elf/bin/aarch64-zephyr-elf-gdb
+#GDB_EXE=${ZEPHYR_SDK_INSTALL_DIR}/gnu/riscv64-zephyr-elf/bin/riscv64-zephyr-elf-gdb
 #GDB_EXE=${ZEPHYR_SDK_INSTALL_DIR}/gnu/x86_64-zephyr-elf/bin/x86_64-zephyr-elf-gdb
 
 # Server @ localhost:1234 qemu

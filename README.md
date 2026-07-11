@@ -59,6 +59,52 @@ The configuration flags `--enable-tls --enable-threads=posix --enable-libstdcxx-
 
 See [Zephyr SDK Toolchain Build Details](doc/Zephyr-SDK-Build.md) for details.
 
+## Testing
+First build and install the target toolchain as an overlay
+to the existing SDK 1.0.1 as described in `Procedure` below.
+
+This repository contains specific goal oriented twister ZTests
+for `pthread` and C++ functionality.
+
+Assuming `scripts/setenv.sh` has been setup properly,
+see `Procedure below`, you can simply launch
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
+. scripts/setenv-run.sh
+
+west twister -p mps2/an385 -T tests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Alternatively, you can edit `./scripts/twister.sh` and enable the desired test platform(s)
+and/or tests - and run it
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
+. ./scripts/twister.sh
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Results
+Working compiler-toolchain and target-platform,
+passing all our twister ZTests:
+- `arm-zephyr-eabi`
+  - `mps2/an385`
+- `aarch64-zephyr-elf`
+  - `qemu_cortex_a53`
+  - `qemu_cortex_a53/qemu_cortex_a53/smp`
+- `riscv64-zephyr-elf`
+  - `qemu_riscv64/qemu_virt_riscv64`
+  - `qemu_riscv64/qemu_virt_riscv64/smp`
+  - `qemu_riscv32/qemu_virt_riscv32`
+
+Having issues still
+- `riscv64-zephyr-elf`
+  - `qemu_riscv32/qemu_virt_riscv32/smp`
+    - `tests/cpp/basic/src/alloc_new.cpp`
+- `x86_64-zephyr-elf`
+  - `qemu_x86_64/atom`
+    - C++ exceptions
+  - `qemu_x86/atom`
+    - C++ exceptions
+
 ## Previous Work
 [OS Issue 25569](https://github.com/zephyrproject-rtos/zephyr/issues/25569)
 used `C11 threads` for GCC's `gthread` implementation and required
@@ -152,15 +198,38 @@ sudo make install
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Toolchain build w/ crosstools-ng
-Brief description of building the toolchain and installing it over the pre-existing SDK.
+Brief description of building the toolchain and installing it over the pre-existing SDK
+for tested target-platforms.
 
+#### `arm-zephyr-eabi`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
-. scripts/setenv.sh
 ./scripts/config-arm-zephyr-eabi.sh
 ct-ng build
 
-rm -rf ${ZEPHYR_SDK_INSTALL_DIR}/gnu/arm-zephyr-eabi.old
-mv ${ZEPHYR_SDK_INSTALL_DIR}/gnu/arm-zephyr-eabi ${ZEPHYR_SDK_INSTALL_DIR}/gnu/arm-zephyr-eabi.old
-cp -a ${CT_PREFIX}/arm-zephyr-eabi ${ZEPHYR_SDK_INSTALL_DIR}/gnu/
+./scripts/install-arm-zephyr-eabi.sh
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### `aarch64-zephyr-elf`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
+./scripts/config-aarch64-zephyr-elf.sh
+ct-ng build
+
+./scripts/install-aarch64-zephyr-elf.sh
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### `riscv64-zephyr-elf`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
+./scripts/config-riscv64-zephyr-elf.sh
+ct-ng build
+
+./scripts/install-riscv64-zephyr-elf.sh
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### `x86_64-zephyr-elf`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.sh}
+./scripts/config-x86_64-zephyr-elf.sh
+ct-ng build
+
+./scripts/install-x86_64-zephyr-elf.sh
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
