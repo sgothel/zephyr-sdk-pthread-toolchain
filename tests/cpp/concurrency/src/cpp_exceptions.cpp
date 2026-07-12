@@ -627,13 +627,12 @@ static void before(void *arg)
 		IS_ENABLED(CONFIG_ARM64),
 		IS_ENABLED(CONFIG_RISCV),
 		IS_ENABLED(CONFIG_X86));
-
+	dbg_PRINT("[dbg %d, no-opt %d, frame-ptr %d]",
+		IS_ENABLED(CONFIG_DEBUG),
+		IS_ENABLED(CONFIG_NO_OPTIMIZATIONS),
+		IS_ENABLED(CONFIG_FRAME_POINTER));
 	if (!IS_ENABLED(CONFIG_DYNAMIC_THREAD)) {
 		/* skip redundant testing if there is no thread pool / heap allocation */
-		ztest_test_skip();
-	}
-	if (false && IS_ENABLED(CONFIG_X86)) {
-		/* x86_64 toolchain issues w/ catching exceptions on a pthread */
 		ztest_test_skip();
 	}
 }
