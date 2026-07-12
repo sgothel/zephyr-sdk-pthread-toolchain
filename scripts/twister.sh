@@ -5,6 +5,11 @@ rootdir=`dirname $sdir`
 
 source ${sdir}/setenv-run.sh
 
+#
+# Manually resolving twister to silently drop platforms
+# when passing multiple platforms.
+# See https://github.com/zephyrproject-rtos/zephyr/issues/113359
+#
 twister_for_all() {
 	testsuite_root=$1
 	shift 1
