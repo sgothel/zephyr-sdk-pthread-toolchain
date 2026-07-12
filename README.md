@@ -94,6 +94,10 @@ passing all our twister ZTests:
   - `qemu_riscv64/qemu_virt_riscv64`
   - `qemu_riscv64/qemu_virt_riscv64/smp`
   - `qemu_riscv32/qemu_virt_riscv32`
+- `x86_64-zephyr-elf`
+  - Note: w/o optimizations, `CONFIG_NO_OPTIMIZATIONS=y` (see below)
+  - `qemu_x86_64/atom`
+  - `qemu_x86/atom`
 
 Having issues still
 - `riscv64-zephyr-elf`
@@ -101,9 +105,30 @@ Having issues still
     - `tests/cpp/basic/src/alloc_new.cpp`
 - `x86_64-zephyr-elf`
   - `qemu_x86_64/atom`
-    - C++ exception unwinding (ABI) issue
+    - C++ exceptions w/ optimizations (see below)
   - `qemu_x86/atom`
-    - C++ exception unwinding (ABI) issue
+    - C++ exceptions w/ optimizations (see below)
+
+### C++ Exception Issues with `x86_64-zephyr-elf`
+As gcc uses Itanium C++ ABI, stack unwinding should work via
+- frame pointers
+- dwarf `.eh_frame`
+
+It seems that gcc optimization w/ our build somehow
+invalidates this information.
+
+Adding below compilation flags after passing `-O2` didn't work either
+- `-fno-omit-frame-pointer`
+- `-mno-omit-leaf-frame-pointer`
+- `-fexceptions`
+- `-fasynchronous-unwind-tables`
+
+Perhaps some other option must be passed to gcc on `x86_64`
+or we have to change the gcc build configuration for this target?
+
+See also
+- [Stack unwinding](https://maskray.me/blog/2020-11-08-stack-unwinding)
+- [C++ exception handling ABI](https://maskray.me/blog/2020-12-12-c++-exception-handling-abi)
 
 ## Previous Work
 [OS Issue 25569](https://github.com/zephyrproject-rtos/zephyr/issues/25569)

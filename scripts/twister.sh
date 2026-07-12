@@ -7,6 +7,7 @@ source ${sdir}/setenv-run.sh
 
 ok_platforms="-p qemu_cortex_a53/qemu_cortex_a53/smp -p qemu_riscv64/qemu_virt_riscv64/smp"
 ok_platforms="${ok_platforms} -p mps2/an385 -p qemu_cortex_a53 -p qemu_riscv64/qemu_virt_riscv64 -p qemu_riscv32/qemu_virt_riscv32"
+ok_platforms="${ok_platforms} -p qemu_x86_64/atom -p qemu_x86/atom"
 
 # SMP
 #platform="qemu_cortex_a53/qemu_cortex_a53/smp"

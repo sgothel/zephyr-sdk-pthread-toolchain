@@ -9,6 +9,6 @@ break /usr/local/projects/OS/zephyrproject/zephyr/lib/os/assert.c:43
 break /usr/local/projects/OS/zephyrproject/zephyr/kernel/fatal.c:91
 break /usr/local/projects/OS/zephyrproject/zephyr/kernel/spinlock_validate.c:18
 break /usr/local/projects/OS/zephyrproject/zephyr/lib/libc/common/source/stdlib/abort.c:13
-#break /usr/local/projects/OS/zephyr-sdk-pthread-toolchain/.build/x86_64-zephyr-elf/src/gcc/libstdc++-v3/libsupc++/eh_personality.cc:437
-#break /usr/local/projects/OS/zephyr-sdk-pthread-toolchain/tests/cpp/concurrency/src/cpp_exceptions.cpp:292
+#break /usr/local/projects/OS/zephyr-sdk-pthread-toolchain/ct_build.x86_64-zephyr-elf/x86_64-zephyr-elf/src/gcc/libstdc++-v3/libsupc++/eh_personality.cc:437
+#break /usr/local/projects/OS/zephyr-sdk-pthread-toolchain/tests/cpp/concurrency/src/cpp_exceptions.cpp:288
 #break /usr/local/projects/OS/zephyr-sdk-pthread-toolchain/tests/cpp/concurrency/src/cpp_exceptions.cpp:300
