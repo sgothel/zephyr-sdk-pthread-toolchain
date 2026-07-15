@@ -4,10 +4,6 @@ common:
     - basic
   min_ram: 64
   timeout: 240
-  # 1 tier0 platform per supported architecture
-  platform_key:
-    - arch
-    - simulation
   filter: not CONFIG_NATIVE_LIBC
 tests:
   cpp.basic.dynamic_stack.tls:
